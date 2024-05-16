@@ -6,12 +6,12 @@ namespace WebAppCourse.Controllers
     {
         public IActionResult Index() 
         {
-            return Content("ciao dall'index dei corsi");
+            return View();
         }
 
         public IActionResult Detail(string id) 
         {
-            return Content($"sono detail, ho ricevuto l'id: {id}");
+            return View();
         }
     }
 }

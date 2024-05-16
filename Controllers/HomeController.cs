@@ -6,7 +6,7 @@ namespace WebAppCourse.Controllers
     {
         public IActionResult Index() 
         {
-            return Content("ciao dall'index");
+            return View();
         }
     }
 }
