@@ -1,0 +1,27 @@
+{
+    "workbench.startupEditor": "none",
+    "git.confirmSync": false,
+    "files.autoSave": "afterDelay",
+    "workbench.iconTheme": "material-icon-theme",
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "git.enableSmartCommit": true,
+    "emmet.includeLanguages": {
+        "html": "html",
+        "javascript": "javascriptreact",
+        "vue-html": "html",
+        "razor": "html"
+    },
+    "emmet.showExpandedAbbreviation": "always",
+    "emmet.triggerExpansionOnTab": true,
+    "browserSync.config": {
+        "proxy": "http://192.168.1.3:5001",
+        "files": ["bin/reload.txt", "Views/**/*.cshtml", "wwwroot/**/*"]
+    },
+    "fontAwesomeAutocomplete.patterns": [
+        "**/*.cshtml"
+    ],
+    "fontAwesomeAutocomplete.triggerWord": "fa-"
+
+}
