@@ -1,6 +1,6 @@
 @model List<CourseViewModel>
 <h1>
-    Catalogo dei corsi
+    @ViewData["Title"]
 </h1>
 @foreach(CourseViewModel course in Model)
 {
@@ -35,7 +35,7 @@
         @course.FullPrice.ToString()<br /><s>@course.CurrentPrice.ToString()</s>
     </div>
     <div class="col-md-2 d-flex align-items-center">
-        <a class="btn btn-outline-primary" asp-action="Detail" asp-route-id="5">Dettaglio corso 5</a>
+        <a class="btn btn-outline-primary" asp-action="Detail" asp-route-id="@course.Id">Dettaglio corso</a>
     </div>
 </div>
 }

@@ -1,12 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
+using WebAppCourse.Models.Services.Application;
 
 namespace WebAppCourse.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index() 
+        private readonly RequestCounterService _requestCounterService;
+
+        public HomeController(RequestCounterService requestCounterService)
         {
-            return View();
+            _requestCounterService = requestCounterService;
+        }
+        public IActionResult Index() 
+        {    
+            int requestCount = _requestCounterService.GetRequestCount();
+            return View(requestCount);
         }
     }
 }

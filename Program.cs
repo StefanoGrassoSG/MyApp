@@ -1,3 +1,6 @@
+using WebAppCourse.Models.Services.Application;
+using WebAppCourse.Models.Services.Middleware;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -5,8 +8,10 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllersWithViews();
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+        builder.Services.AddTransient<ICourseService, CourseService>();
+        builder.Services.AddSingleton<RequestCounterService>();
         var app = builder.Build();
-        
+        app.UseMiddleware<RequestCountingMiddleware>();
         var env = app.Services.GetRequiredService<IWebHostEnvironment>();
 
         if(env.IsDevelopment()) {
