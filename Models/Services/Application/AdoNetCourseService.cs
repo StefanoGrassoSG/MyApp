@@ -1,0 +1,51 @@
+using System.Data;
+using WebAppCourse.Models.ViewModels;
+using WebAppCourse.Models.Services.Infrastructure;
+
+namespace WebAppCourse.Models.Services.Application
+{
+    public class AdoNetCourseService : ICourseService
+    {
+        private readonly IDatabase db;
+        public AdoNetCourseService(IDatabase db)
+        {
+            this.db = db;
+        }   
+        public CourseDetailViewModel GetCourse(int id)
+        {
+            FormattableString query = $@"SELECT Id,Title,Description,ImagePath,Author,Rating,FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency FROM Courses WHERE Id={id}
+            ; SELECT Id,Title,Description,Duration FROM Lessons WHERE CourseId={id}";
+            DataSet dataSet = db.Query(query);
+
+            var courseTable = dataSet.Tables[0];
+            if(courseTable.Rows.Count != 1) {
+                throw new InvalidOperationException($"Did not return 1 row for course {id}");
+            }
+            var courseRow = courseTable.Rows[0];
+            var courseDetailViewModel = CourseDetailViewModel.FromDataRow(courseRow);
+
+            var lessonDataTable = dataSet.Tables[1];
+
+            foreach (DataRow lessonRow in lessonDataTable.Rows)
+            {
+                var lessonViewModel = LessonViewModel.FromDataRow(lessonRow);
+                courseDetailViewModel.Lessons.Add(lessonViewModel);
+            }
+            return courseDetailViewModel;
+        }
+
+        public List<CourseViewModel> GetCourses()
+        {
+            FormattableString query = $"SELECT Id,Title,ImagePath,Author,Rating,FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency FROM Courses";
+            DataSet dataSet = db.Query(query);
+            var dataTable = dataSet.Tables[0];
+            var courseList = new List<CourseViewModel>();
+            foreach (var courseRow in dataTable.Rows)
+            {
+                var course = CourseViewModel.FromDataRow((DataRow)courseRow);
+                courseList.Add(course);
+            }
+            return courseList;
+        }
+    }
+}

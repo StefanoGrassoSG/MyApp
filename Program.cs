@@ -1,4 +1,5 @@
 using WebAppCourse.Models.Services.Application;
+using WebAppCourse.Models.Services.Infrastructure;
 using WebAppCourse.Models.Services.Middleware;
 
 internal class Program
@@ -8,7 +9,8 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllersWithViews();
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-        builder.Services.AddTransient<ICourseService, CourseService>();
+        builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
+        builder.Services.AddTransient<IDatabase, SqlDatabaseAccessor>();
         builder.Services.AddSingleton<RequestCounterService>();
         var app = builder.Build();
         app.UseMiddleware<RequestCountingMiddleware>();
