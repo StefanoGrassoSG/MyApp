@@ -4,6 +4,6 @@ namespace WebAppCourse.Models.Services.Infrastructure
 {
     public interface IDatabase
     {
-        DataSet Query(FormattableString query);
+        Task<DataSet> Query(FormattableString query);
     }
 }

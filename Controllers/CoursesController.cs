@@ -12,16 +12,16 @@ namespace WebAppCourse.Controllers
         {
             this.service = service;
         }
-        public IActionResult Index() 
+        public async Task<IActionResult> Index() 
         {
-            List<CourseViewModel> courses = service.GetCourses();
+            List<CourseViewModel> courses = await service.GetCourses();
             ViewData["Title"] = "Catalogo dei corsi";
             return View(courses);
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            CourseDetailViewModel viewModel = service.GetCourse(id);
+            CourseDetailViewModel viewModel = await service.GetCourse(id);
             ViewData["title"] = viewModel.Title;
             return View(viewModel);
         }
