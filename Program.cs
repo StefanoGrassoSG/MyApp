@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebAppCourse.Models.Options;
@@ -10,21 +11,34 @@ internal class Program
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddResponseCaching();
+        builder.Services.AddMvc(options => 
+        {   
+            var homeProfile = new CacheProfile();
+            homeProfile.Duration = builder.Configuration.GetValue<int>("ResponseCache:Home:Duration");
+            homeProfile.Location = builder.Configuration.GetValue<ResponseCacheLocation>("ResponseCache:Home:Location");
+            homeProfile.VaryByQueryKeys = builder.Configuration.GetValue<string[]>("ResponseCache:Home:VaryByQueryKeys");
+            //homeProfile.VaryByQueryKeys = new string[] {"page"};
+            options.CacheProfiles.Add("Home", homeProfile);
+        });
         builder.Services.AddControllersWithViews();
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
         //builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
         builder.Services.AddTransient<ICourseService, EfCoreCourseService>();
-        builder.Services.AddTransient<IDatabase, SqlDatabaseAccessor>();
+        //builder.Services.AddTransient<IDatabase, SqlDatabaseAccessor>();
+        builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
         builder.Configuration.AddJsonFile("appsettings.json");
-        string connectionString = builder.Configuration.GetConnectionString("default")!;
+        builder.Configuration.AddEnvironmentVariables();
+        string connectionStringWrong = builder.Configuration.GetConnectionString("default")!;
+        string connectionString = connectionStringWrong.Replace(@"\\", @"\");
         builder.Services.AddDbContextPool<WebAppDbContext>(optionsBuilder => {
             optionsBuilder.UseSqlServer(connectionString);
         });
         builder.Services.AddSingleton<RequestCounterService>();
         builder.Services.Configure<ConnectionStringsOptions>(builder.Configuration.GetSection("ConnectionStrings"));
         builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection("Courses"));
+        builder.Services.Configure<CacheTimeOptions>(builder.Configuration.GetSection("Cache"));
         var app = builder.Build();
-        app.UseMiddleware<RequestCountingMiddleware>();
         var env = app.Services.GetRequiredService<IWebHostEnvironment>();
 
      
@@ -44,8 +58,13 @@ internal class Program
                 File.AppendAllText(filePath, logMessage);
             });
         }
-
+        else {
+            app.UseExceptionHandler("/Error");
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
+        }
+        app.UseMiddleware<RequestCountingMiddleware>();
         app.UseStaticFiles();
+        app.UseResponseCaching();
         app.UseRouting();
         app.MapControllerRoute(
             name: "default",

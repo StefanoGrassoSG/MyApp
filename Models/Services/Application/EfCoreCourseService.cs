@@ -1,6 +1,7 @@
 using System.Xml.Schema;
 using Microsoft.EntityFrameworkCore;
 using WebAppCourse.Models.Entities;
+using WebAppCourse.Models.Exceptions;
 using WebAppCourse.Models.Services.Infrastructure;
 using WebAppCourse.Models.ValueTypes;
 using WebAppCourse.Models.ViewModels;
@@ -10,39 +11,49 @@ namespace WebAppCourse.Models.Services.Application
     public class EfCoreCourseService : ICourseService
     {
         private readonly WebAppDbContext dbContext;
-        public EfCoreCourseService(WebAppDbContext dbContext)
+        private readonly ILogger logger;
+        public EfCoreCourseService(WebAppDbContext dbContext, ILogger<EfCoreCourseService> logger)
         {
             this.dbContext = dbContext;
+            this.logger = logger;
         } 
         public async Task<CourseDetailViewModel> GetCourse(int id)
         {
-           CourseDetailViewModel course = await dbContext.Courses.AsNoTracking().Where(obj => obj.Id == id).Select(obj => new CourseDetailViewModel {
-                Id = obj.Id,
-                Title = obj.Title,
-                ImagePath = obj.ImagePath,
-                Author = obj.Author,                         
-                Rating = obj.Rating,
-                CurrentPrice = new Money
-                {
-                    Amount = obj.CurrentPrice.Amount,
-                    Currency = obj.CurrentPrice.Currency
-                },
-                FullPrice = new Money
-                {
-                    Amount = obj.FullPrice.Amount,
-                    Currency = obj.FullPrice.Currency
-                },
-                Description = obj.Description,
-                Lessons = obj.Lessons.Select(obj => new LessonViewModel
+                var course = await dbContext.Courses.AsNoTracking()
+                .Where(obj => obj.Id == id)
+                .Select(obj => new CourseDetailViewModel
                 {
                     Id = obj.Id,
                     Title = obj.Title,
+                    ImagePath = obj.ImagePath,
+                    Author = obj.Author,
+                    Rating = obj.Rating,
+                    CurrentPrice = new Money
+                    {
+                        Amount = obj.CurrentPrice.Amount,
+                        Currency = obj.CurrentPrice.Currency
+                    },
+                    FullPrice = new Money
+                    {
+                        Amount = obj.FullPrice.Amount,
+                        Currency = obj.FullPrice.Currency
+                    },
                     Description = obj.Description,
-                    Duration = TimeSpan.Parse(obj.Duration)
-                }).ToList()
-           }).SingleAsync();
+                    Lessons = obj.Lessons.Select(lesson => new LessonViewModel
+                    {
+                        Id = lesson.Id,
+                        Title = lesson.Title,
+                        Description = lesson.Description,
+                        Duration = TimeSpan.Parse(lesson.Duration)
+                    }).ToList()
+                }).SingleOrDefaultAsync();
 
-           return course;
+            if (course == null)
+            {
+                throw new CourseNotFoundException(id);
+            }
+
+            return course;
         }
 
         public async Task<List<CourseViewModel>> GetCourses()

@@ -7,8 +7,8 @@ namespace WebAppCourse.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly ICourseService service;
-        public CoursesController(ICourseService service)
+        private readonly ICachedCourseService service;
+        public CoursesController(ICachedCourseService service)
         {
             this.service = service;
         }

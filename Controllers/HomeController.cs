@@ -11,8 +11,10 @@ namespace WebAppCourse.Controllers
         {
             _requestCounterService = requestCounterService;
         }
+        [ResponseCache(CacheProfileName = "Home")]
         public IActionResult Index() 
         {    
+            ViewData["Title"] = "SkillMe";
             int requestCount = _requestCounterService.GetRequestCount();
             return View(requestCount);
         }
