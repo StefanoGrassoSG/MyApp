@@ -7,10 +7,6 @@ namespace WebAppCourse.Models.Services.Infrastructure;
 
 public partial class WebAppDbContext : DbContext
 {
-    public WebAppDbContext()
-    {
-    }
-
     public WebAppDbContext(DbContextOptions<WebAppDbContext> options)
         : base(options)
     {
@@ -19,10 +15,6 @@ public partial class WebAppDbContext : DbContext
     public virtual DbSet<Course> Courses { get; set; }
 
     public virtual DbSet<Lesson> Lessons { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=WEBAPPCOURSE;Trusted_Connection=True;TrustServerCertificate=True");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Course>(entity =>
@@ -30,6 +22,23 @@ public partial class WebAppDbContext : DbContext
             entity.ToTable("Courses");
             entity.HasKey(course => course.Id);
             
+            entity.OwnsOne(course => course.CurrentPrice, builder => {
+                builder.Property(money => money.Currency)
+                .HasConversion<string>()
+                .HasColumnName("CurrentPrice_Currency");
+                builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount");
+            });
+
+            entity.OwnsOne(course => course.FullPrice, builder => {
+                builder.Property(money => money.Currency)
+                .HasConversion<string>()
+                .HasColumnName("FullPrice_Currency");
+                builder.Property(money => money.Amount).HasColumnName("FullPrice_Amount");
+            });
+
+            entity.HasMany(course => course.Lessons)
+                .WithOne(lesson => lesson.Course)
+                .HasForeignKey(lesson => lesson.CourseId);  
             #region Mapping generato automaticamente dal tool di reverse engineering
            /* entity.HasKey(e => e.Id).HasName("PK__Courses__3214EC071C5F068D");
 

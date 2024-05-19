@@ -1,10 +1,19 @@
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Options;
+using WebAppCourse.Models.Options;
 
 namespace WebAppCourse.Models.Services.Infrastructure
 {
     public class SqlDatabaseAccessor : IDatabase
     {
+        private readonly IOptionsMonitor<ConnectionStringsOptions> options;
+
+        public SqlDatabaseAccessor(IOptionsMonitor<ConnectionStringsOptions> options)
+        {
+            this.options = options;
+        }
         public async Task<DataSet> Query(FormattableString fQuery)
         {   
             var queryArguments = fQuery.GetArguments();
@@ -16,8 +25,8 @@ namespace WebAppCourse.Models.Services.Infrastructure
                 queryArguments[i] = "@" + i;
             }
             string query = fQuery.ToString();
-
-            using (var conn = new SqlConnection("Server=localhost\\SQLEXPRESS;Database=WEBAPPCOURSE;Trusted_Connection=True"))
+            string connectionString = options.CurrentValue.Default;
+            using (var conn = new SqlConnection(connectionString))
             {
                 await conn.OpenAsync();
                 using (var cmd = new SqlCommand(query, conn))

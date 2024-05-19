@@ -33,7 +33,7 @@
         }
     </div>
     <div class="col-md-2 price">
-        @course.FullPrice.ToString()<br /><s>@course.CurrentPrice.ToString()</s>
+        @course.CurrentPrice.ToString()<br /><s>@course.FullPrice.ToString()</s>
     </div>
     <div class="col-md-2 d-flex align-items-center">
         <a class="btn btn-outline-primary" asp-action="Detail" asp-route-id="@course.Id">Dettaglio corso</a>

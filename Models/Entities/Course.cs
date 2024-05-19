@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebAppCourse.Models.ValueTypes;
 
 namespace WebAppCourse.Models.Entities;
 
@@ -19,13 +20,9 @@ public partial class Course
 
     public decimal? Rating { get; set; }
 
-    public decimal? FullPriceAmount { get; set; }
+    public Money FullPrice { get; set; }
 
-    public string FullPriceCurrency { get; set; } = null!;
-
-    public decimal? CurrentPriceAmount { get; set; }
-
-    public string CurrentPriceCurrency { get; set; } = null!;
+    public Money CurrentPrice { get; set; }
 
     public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
 }

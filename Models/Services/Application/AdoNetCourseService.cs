@@ -1,15 +1,19 @@
 using System.Data;
 using WebAppCourse.Models.ViewModels;
 using WebAppCourse.Models.Services.Infrastructure;
+using Microsoft.Extensions.Options;
+using WebAppCourse.Models.Options;
 
 namespace WebAppCourse.Models.Services.Application
 {
     public class AdoNetCourseService : ICourseService
     {
         private readonly IDatabase db;
-        public AdoNetCourseService(IDatabase db)
+        private readonly IOptionsMonitor<CoursesOptions> courseOptions;
+        public AdoNetCourseService(IDatabase db, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
             this.db = db;
+            this.courseOptions = coursesOptions;
         }   
         public async Task<CourseDetailViewModel> GetCourse(int id)
         {

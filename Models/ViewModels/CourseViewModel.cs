@@ -8,9 +8,9 @@ namespace WebAppCourse.Models.ViewModels
     {
         public int Id {get;set;}
         public string Title {get;set;}
-        public string ImagePath {get;set;}
+        public string? ImagePath {get;set;}
         public string Author {get;set;}
-        public double Rating {get;set;}
+        public decimal? Rating {get;set;}
         public Money FullPrice {get;set;}
         public Money CurrentPrice {get;set;}
 
@@ -22,7 +22,7 @@ namespace WebAppCourse.Models.ViewModels
                 Title = (string) courseRow["Title"],
                 ImagePath = (string) courseRow["ImagePath"],
                 Author = (string) courseRow["Author"],
-                Rating = (double)(decimal) courseRow["Rating"],
+                Rating = (decimal) courseRow["Rating"],
                 FullPrice = new Money(Enum.Parse<Currency>((string) courseRow["FullPrice_Currency"]),(decimal) courseRow["FullPrice_Amount"]),
                 CurrentPrice = new Money(Enum.Parse<Currency>((string) courseRow["CurrentPrice_Currency"]),(decimal) courseRow["CurrentPrice_Amount"])
             };
