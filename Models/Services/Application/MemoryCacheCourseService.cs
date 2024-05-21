@@ -2,6 +2,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using WebAppCourse.Models.Exceptions;
+using WebAppCourse.Models.InputModels;
 using WebAppCourse.Models.Options;
 using WebAppCourse.Models.ViewModels;
 
@@ -36,14 +37,20 @@ namespace WebAppCourse.Models.Services.Application
             });
         }
 
-        public Task<List<CourseViewModel>> GetCourses(string search, int page, string orderby, bool ascending)
+        public Task<List<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
         {
+            bool canCache = courseListInputModel.Page <= 5 && string.IsNullOrEmpty(courseListInputModel.Search);
             int TimeCached = cacheoptions.CurrentValue.Time;
-            return memoryCache.GetOrCreateAsync($"Courses{search}+{page}+{orderby}+{ascending}", cacheEntry =>
+            if(canCache) 
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(TimeCached));
-                return courseService.GetCourses(search, page, orderby, ascending);
-            });
+                return memoryCache.GetOrCreateAsync($"Courses{courseListInputModel.Search}+{courseListInputModel.Page}+{courseListInputModel.Orderby}+{courseListInputModel.Ascending}", cacheEntry =>
+                {
+                    cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(TimeCached));
+                    return courseService.GetCourses(courseListInputModel);
+                });
+            }
+
+            return courseService.GetCourses(courseListInputModel);
         }
     }
 }

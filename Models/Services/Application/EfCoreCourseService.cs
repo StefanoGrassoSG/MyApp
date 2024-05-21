@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WebAppCourse.Models.Entities;
 using WebAppCourse.Models.Exceptions;
+using WebAppCourse.Models.InputModels;
 using WebAppCourse.Models.Options;
 using WebAppCourse.Models.Services.Infrastructure;
 using WebAppCourse.Models.ValueTypes;
@@ -60,25 +61,14 @@ namespace WebAppCourse.Models.Services.Application
             return course;
         }
 
-        public async Task<List<CourseViewModel>> GetCourses(string search, int page, string orderby, bool ascending)
+        public async Task<List<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
         {
-            search = search ?? "";
-            page = Math.Max(1, page);
-            int limit = courseOptions.CurrentValue.PerPage;
-            int offset = (page - 1) * limit;
-            var orderOptions = courseOptions.CurrentValue.Order;
-            if(!orderOptions.Allow.Contains(orderby)) 
-            {
-                orderby = orderOptions.By;
-                ascending = orderOptions.Ascending;
-            }
-
             IQueryable<Course> baseQuery = dbContext.Courses;
 
-            switch(orderby)
+            switch(courseListInputModel.Orderby)
             {
                 case "Title":
-                    if(ascending)
+                    if(courseListInputModel.Ascending)
                     {
                         baseQuery = baseQuery.OrderBy(obj => obj.Title);
                     }
@@ -88,7 +78,7 @@ namespace WebAppCourse.Models.Services.Application
                     }
                     break;
                 case "Rating":
-                    if(ascending)
+                    if(courseListInputModel.Ascending)
                     {
                         baseQuery = baseQuery.OrderBy(obj => obj.Rating);
                     }
@@ -98,7 +88,7 @@ namespace WebAppCourse.Models.Services.Application
                     }
                     break;
                 case "CurrentPrice":
-                    if(ascending)
+                    if(courseListInputModel.Ascending)
                     {
                         baseQuery = baseQuery.OrderBy(obj => obj.CurrentPrice.Amount);
                     }
@@ -109,7 +99,7 @@ namespace WebAppCourse.Models.Services.Application
                     break;
             }
 
-            IQueryable<CourseViewModel> queryLinq =  baseQuery.Where(obj => obj.Title.Contains(search)).AsNoTracking().Select(obj => new CourseViewModel {
+            IQueryable<CourseViewModel> queryLinq =  baseQuery.Where(obj => obj.Title.Contains(courseListInputModel.Search)).AsNoTracking().Select(obj => new CourseViewModel {
                 Id = obj.Id,
                 Title = obj.Title,
                 ImagePath = obj.ImagePath,
@@ -125,7 +115,7 @@ namespace WebAppCourse.Models.Services.Application
                     Amount = obj.FullPrice.Amount,
                     Currency = obj.FullPrice.Currency
                 }
-            }).Skip(offset).Take(limit);
+            }).Skip(courseListInputModel.Offset).Take(courseListInputModel.Limit);
 
             List<CourseViewModel> courses = await queryLinq.ToListAsync();
 

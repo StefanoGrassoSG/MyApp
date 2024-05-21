@@ -1,5 +1,6 @@
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
+using WebAppCourse.Models.InputModels;
 using WebAppCourse.Models.Services.Application;
 using WebAppCourse.Models.ViewModels;
 
@@ -12,9 +13,9 @@ namespace WebAppCourse.Controllers
         {
             this.service = service;
         }
-        public async Task<IActionResult> Index(string search, int page, string orderby, bool ascending) 
+        public async Task<IActionResult> Index(CourseListInputModel model) 
         {
-            List<CourseViewModel> courses = await service.GetCourses(search, page, orderby, ascending);
+            List<CourseViewModel> courses = await service.GetCourses(model);
             ViewData["Title"] = "Catalogo dei corsi";
             return View(courses);
         }

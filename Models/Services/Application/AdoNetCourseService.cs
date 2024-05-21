@@ -3,6 +3,7 @@ using WebAppCourse.Models.ViewModels;
 using WebAppCourse.Models.Services.Infrastructure;
 using Microsoft.Extensions.Options;
 using WebAppCourse.Models.Options;
+using WebAppCourse.Models.InputModels;
 
 namespace WebAppCourse.Models.Services.Application
 {
@@ -38,23 +39,10 @@ namespace WebAppCourse.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCourses(string search, int page, string orderby, bool ascending)
+        public async Task<List<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
         {
-            page = Math.Max(1, page);
-            int limit = courseOptions.CurrentValue.PerPage;
-            int offset = (page - 1) * limit;
-            var orderOptions = courseOptions.CurrentValue.Order;
-            if(!orderOptions.Allow.Contains(orderby)) 
-            {
-                orderby = orderOptions.By;
-                ascending = orderOptions.Ascending;
-            }
-            if(orderby == "CurrentPrice") 
-            {
-                orderby = "CurrentPrice_Amount";
-            }
-            string direction = ascending ? "ASC" : "DESC";
-            FormattableString query = $"SELECT Id,Title,ImagePath,Author,Rating,FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency FROM Courses WHERE Title LIKE {'%' + search + '%'} ORDER BY {orderby} {direction} LIMIT {limit} OFFSET {offset}";
+            string direction = courseListInputModel.Ascending ? "ASC" : "DESC";
+            FormattableString query = $"SELECT Id,Title,ImagePath,Author,Rating,FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency FROM Courses WHERE Title LIKE {'%' + courseListInputModel.Search + '%'} ORDER BY {courseListInputModel.Orderby} {direction} LIMIT {courseListInputModel.Limit} OFFSET {courseListInputModel.Offset}";
             DataSet dataSet = await db.Query(query);
             var dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
