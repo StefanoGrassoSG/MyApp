@@ -15,7 +15,8 @@ namespace WebAppCourse.Models.Services.Application
         {
             this.db = db;
             this.courseOptions = coursesOptions;
-        }   
+        }
+
         public async Task<CourseDetailViewModel> GetCourse(int id)
         {
             FormattableString query = $@"SELECT Id,Title,Description,ImagePath,Author,Rating,FullPrice_Amount,FullPrice_Currency,CurrentPrice_Amount,CurrentPrice_Currency FROM Courses WHERE Id={id}
@@ -57,6 +58,15 @@ namespace WebAppCourse.Models.Services.Application
                 results.TotalCount++;
             }
             return results;
+        }
+
+        public Task<List<CourseViewModel>> GetMostRecentCourses()
+        {
+            throw new NotImplementedException();
+        }
+        public Task<List<CourseViewModel>> GetBestRatingCourses()
+        {
+            throw new NotImplementedException();
         }
     }
 }

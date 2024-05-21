@@ -77,6 +77,16 @@ namespace WebAppCourse.Models.Services.Application
                         baseQuery = baseQuery.OrderByDescending(obj => obj.Title);
                     }
                     break;
+                case "Id":
+                    if(courseListInputModel.Ascending)
+                    {
+                        baseQuery = baseQuery.OrderBy(obj => obj.Id);
+                    }
+                    else
+                    {
+                        baseQuery = baseQuery.OrderByDescending(obj => obj.Id);
+                    }
+                    break;
                 case "Rating":
                     if(courseListInputModel.Ascending)
                     {
@@ -125,6 +135,36 @@ namespace WebAppCourse.Models.Services.Application
             };
 
             return results;
+        }
+        public async Task<List<CourseViewModel>> GetMostRecentCourses()
+        {
+            CourseListInputModel inputModel = new CourseListInputModel
+            (
+                search: "",
+                page: 1,
+                orderby: "Id",
+                ascending: false,
+                limit: courseOptions.CurrentValue.InHome,
+                coursesOptions: courseOptions.CurrentValue
+            );
+
+            ListViewModel<CourseViewModel> result = await GetCourses(inputModel);
+            return result.Results;
+        }
+        public async Task<List<CourseViewModel>> GetBestRatingCourses()
+        {
+              CourseListInputModel inputModel = new CourseListInputModel
+            (
+                search: "",
+                page: 1,
+                orderby: "Rating",
+                ascending: false,
+                limit: courseOptions.CurrentValue.InHome,
+                coursesOptions: courseOptions.CurrentValue
+            );
+
+            ListViewModel<CourseViewModel> result = await GetCourses(inputModel);
+            return result.Results;
         }
     }
 }

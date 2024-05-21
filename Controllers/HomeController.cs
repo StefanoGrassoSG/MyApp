@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebAppCourse.Models.Services.Application;
+using WebAppCourse.Models.ViewModels;
 
 namespace WebAppCourse.Controllers
 {
@@ -12,11 +13,19 @@ namespace WebAppCourse.Controllers
             _requestCounterService = requestCounterService;
         }
         [ResponseCache(CacheProfileName = "Home")]
-        public IActionResult Index() 
+        public async Task<IActionResult> Index([FromServices] ICachedCourseService courseService) 
         {    
             ViewData["Title"] = "SkillMe";
             int requestCount = _requestCounterService.GetRequestCount();
-            return View(requestCount);
+            List<CourseViewModel> bestRating = await courseService.GetBestRatingCourses();
+            List<CourseViewModel> mostrecent = await courseService.GetMostRecentCourses();
+
+            HomeViewModel viewModel = new HomeViewModel
+            {
+                BestRatingCourses = bestRating,
+                MostRecentCourses = mostrecent
+            };
+            return View(viewModel);
         }
     }
 }

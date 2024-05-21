@@ -7,7 +7,7 @@ namespace WebAppCourse.Models.InputModels
     [ModelBinder(BinderType = typeof(CourseListInputModelBinder))]
     public class CourseListInputModel
     {
-        public CourseListInputModel(string search, int page, string orderby, bool ascending, CoursesOptions coursesOptions)
+        public CourseListInputModel(string search, int page, string orderby, bool ascending,int limit, CoursesOptions coursesOptions)
         {
             var orderOptions = coursesOptions.Order;
             if(!orderOptions.Allow.Contains(orderby))
@@ -21,7 +21,7 @@ namespace WebAppCourse.Models.InputModels
             Orderby = orderby;
             Ascending = ascending;
 
-            this.Limit = coursesOptions.PerPage;
+            this.Limit = limit;
             this. Offset = (Page - 1) * Limit;
         }
         public string? Search {get;}

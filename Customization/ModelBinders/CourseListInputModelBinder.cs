@@ -19,7 +19,7 @@ namespace WebAppCourse.Customization.ModelBinders
             string? orderby = bindingContext.ValueProvider.GetValue("Orderby").FirstValue;
             bool ascending = Convert.ToBoolean(bindingContext.ValueProvider.GetValue("Ascending").FirstValue);
 
-            var inputModel = new CourseListInputModel(search, page, orderby, ascending, courseOptions.CurrentValue);
+            var inputModel = new CourseListInputModel(search, page, orderby, ascending,courseOptions.CurrentValue.PerPage, courseOptions.CurrentValue);
 
             bindingContext.Result = ModelBindingResult.Success(inputModel);
 

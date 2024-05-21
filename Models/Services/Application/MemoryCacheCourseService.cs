@@ -40,17 +40,32 @@ namespace WebAppCourse.Models.Services.Application
         public Task<ListViewModel<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
         {
             bool canCache = courseListInputModel.Page <= 5 && string.IsNullOrEmpty(courseListInputModel.Search);
-            int TimeCached = cacheoptions.CurrentValue.Time;
             if(canCache) 
             {
                 return memoryCache.GetOrCreateAsync($"Courses{courseListInputModel.Search}+{courseListInputModel.Page}+{courseListInputModel.Orderby}+{courseListInputModel.Ascending}", cacheEntry =>
                 {
-                    cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(TimeCached));
+                    cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(cacheoptions.CurrentValue.Time));
                     return courseService.GetCourses(courseListInputModel);
                 });
             }
 
             return courseService.GetCourses(courseListInputModel);
+        }
+        public Task<List<CourseViewModel>> GetMostRecentCourses()
+        {
+            return memoryCache.GetOrCreateAsync($"MostRecentCourses", cacheEntry => 
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(cacheoptions.CurrentValue.Time));
+                return courseService.GetMostRecentCourses();
+            });
+        }
+        public Task<List<CourseViewModel>> GetBestRatingCourses()
+        {
+            return memoryCache.GetOrCreateAsync($"BestRatingCourses", cacheEntry => 
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(cacheoptions.CurrentValue.Time));
+                return courseService.GetBestRatingCourses();
+            });
         }
     }
 }

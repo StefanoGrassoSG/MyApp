@@ -63,3 +63,24 @@ footer {
 .course-lessons .course-duration {
     font-weight: bold;
 }
+
+section+section {
+    margin-top: 2em;
+}
+
+.jumbotron {
+    background-image: url('/back2.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 2em;
+    opacity: 1;
+}
+
+.jumbotron h1 {
+    font-size: 3.5rem;
+}
+
+.jumbotron p {
+    font-size: 2.5rem;
+}
