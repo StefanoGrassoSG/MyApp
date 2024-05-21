@@ -17,7 +17,12 @@ namespace WebAppCourse.Controllers
         {
             List<CourseViewModel> courses = await service.GetCourses(model);
             ViewData["Title"] = "Catalogo dei corsi";
-            return View(courses);
+            CourseListViewModel viewModel = new CourseListViewModel
+            {
+                Courses = courses,
+                Input = model
+            };
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Detail(int id)
