@@ -82,7 +82,7 @@
         @if(currentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-page="@(currentPage-1)">Precedente</a>
+                <a class="page-link" asp-route-page="@(currentPage-1)" asp-route-search="@Model.Input.Search" asp-route-orderby="@Model.Input.Orderby" asp-route-ascending="@Model.Input.Ascending">Precedente</a>
             </li>
         }
         @for(int p = 1; p <= totalPages;p++)
@@ -90,20 +90,20 @@
             if(p == currentPage)
             {
                 <li class="page-item active" aria-current="page">
-                    <a class="page-link" asp-route-page="@p">Page @p<span class="sr-only">(current)</span></a>
+                    <a class="page-link" asp-route-page="@p" asp-route-search="@Model.Input.Search" asp-route-orderby="@Model.Input.Orderby" asp-route-ascending="@Model.Input.Ascending">@p</a>
                 </li>
             }
             else 
             {
                 <li class="page-item">
-                    <a class="page-link" asp-route-page="@p">Page @p</a>
+                    <a class="page-link" asp-route-page="@p" asp-route-search="@Model.Input.Search" asp-route-orderby="@Model.Input.Orderby" asp-route-ascending="@Model.Input.Ascending">@p</a>
                 </li>
             }
         } 
         @if(currentPage < totalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-page="@(currentPage+1)">Successiva</a>
+                <a class="page-link" asp-route-page="@(currentPage+1)" asp-route-search="@Model.Input.Search" asp-route-orderby="@Model.Input.Orderby" asp-route-ascending="@Model.Input.Ascending">Successiva</a>
             </li>
         }
     </ul>
