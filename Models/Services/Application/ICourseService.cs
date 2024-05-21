@@ -5,7 +5,7 @@ namespace WebAppCourse.Models.Services.Application
 {
     public interface ICourseService 
     {
-        Task<List<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel);
+        Task<ListViewModel<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel);
         Task<CourseDetailViewModel> GetCourse(int id);
     }
 }

@@ -37,7 +37,7 @@ namespace WebAppCourse.Models.Services.Application
             });
         }
 
-        public Task<List<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
+        public Task<ListViewModel<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
         {
             bool canCache = courseListInputModel.Page <= 5 && string.IsNullOrEmpty(courseListInputModel.Search);
             int TimeCached = cacheoptions.CurrentValue.Time;

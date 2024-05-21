@@ -61,7 +61,7 @@ namespace WebAppCourse.Models.Services.Application
             return course;
         }
 
-        public async Task<List<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
+        public async Task<ListViewModel<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
         {
             IQueryable<Course> baseQuery = dbContext.Courses;
 
@@ -115,11 +115,16 @@ namespace WebAppCourse.Models.Services.Application
                     Amount = obj.FullPrice.Amount,
                     Currency = obj.FullPrice.Currency
                 }
-            }).Skip(courseListInputModel.Offset).Take(courseListInputModel.Limit);
+            });
+            int count = await queryLinq.CountAsync();
+            List<CourseViewModel> courses = await queryLinq.Skip(courseListInputModel.Offset).Take(courseListInputModel.Limit).ToListAsync();
+            ListViewModel<CourseViewModel> results = new ListViewModel<CourseViewModel>
+            {
+                Results = courses,
+                TotalCount = count
+            };
 
-            List<CourseViewModel> courses = await queryLinq.ToListAsync();
-
-            return courses;
+            return results;
         }
     }
 }
