@@ -23,13 +23,13 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-5">
-        <a class="link-underline-light fs-5" asp-route-orderby="Title" asp-route-ascending="@(Model.Input.Orderby == "Title" ? !Model.Input.Ascending : true)" asp-route-search="@Model.Input.Search">Titolo @if(Model.Input.Orderby == "Title") {<i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>} </a>
+        <a class="link-underline-light fs-5" asp-route-page="@(Model.Input.Page)" asp-route-orderby="Title" asp-route-ascending="@(Model.Input.Orderby == "Title" ? !Model.Input.Ascending : true)" asp-route-search="@Model.Input.Search">Titolo @if(Model.Input.Orderby == "Title") {<i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>} </a>
     </div>
     <div class="col-md-2">
-        <a class="link-underline-light fs-5" asp-route-orderby="Rating" asp-route-ascending="@(Model.Input.Orderby == "Rating" ? !Model.Input.Ascending : true)" asp-route-search="@Model.Input.Search">Valutazione  @if(Model.Input.Orderby == "Rating") {<i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>} </a>
+        <a class="link-underline-light fs-5" asp-route-page="@(Model.Input.Page)" asp-route-orderby="Rating" asp-route-ascending="@(Model.Input.Orderby == "Rating" ? !Model.Input.Ascending : true)" asp-route-search="@Model.Input.Search">Valutazione  @if(Model.Input.Orderby == "Rating") {<i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>} </a>
     </div>
     <div class="col-md-2">
-        <a class="link-underline-light fs-5" asp-route-orderby="CurrentPrice" asp-route-ascending="@(Model.Input.Orderby == "CurrentPrice" ? !Model.Input.Ascending : true)" asp-route-search="@Model.Input.Search">Prezzo @if(Model.Input.Orderby == "CurrentPrice") {<i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>} </a>
+        <a class="link-underline-light fs-5" asp-route-page="@(Model.Input.Page)" asp-route-orderby="CurrentPrice" asp-route-ascending="@(Model.Input.Orderby == "CurrentPrice" ? !Model.Input.Ascending : true)" asp-route-search="@Model.Input.Search">Prezzo @if(Model.Input.Orderby == "CurrentPrice") {<i class="fas fa-caret-@(Model.Input.Ascending ? "up" : "down")"></i>} </a>
     </div>
     <div class="col-md-2"></div>
 </div>
