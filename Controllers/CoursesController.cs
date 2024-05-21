@@ -12,9 +12,9 @@ namespace WebAppCourse.Controllers
         {
             this.service = service;
         }
-        public async Task<IActionResult> Index() 
+        public async Task<IActionResult> Index(string search, int page, string orderby, bool ascending) 
         {
-            List<CourseViewModel> courses = await service.GetCourses();
+            List<CourseViewModel> courses = await service.GetCourses(search, page, orderby, ascending);
             ViewData["Title"] = "Catalogo dei corsi";
             return View(courses);
         }

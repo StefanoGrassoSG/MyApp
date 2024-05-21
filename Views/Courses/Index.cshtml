@@ -1,7 +1,39 @@
 @model List<CourseViewModel>
-<h1>
-    @ViewData["Title"]
-</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>
+            @ViewData["Title"]
+        </h1>
+    </div>
+    <div class="col-md-4 d-flex align-items-center">
+        <form asp-controller="Courses" asp-action="Index" method="get">
+            <div class="input-group">
+                <input type="text" name="search" placeholder="Cerca...">
+                <div class="input-group-append">
+                    <button class="input-group-text" title="Cerca">
+                        <i class="fa- fas fa-search"></i>
+                    </button>
+                </div>  
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <a class="link-underline-light fs-5" asp-route-orderby="Title" asp-route-ascending="true">Titolo</a>
+    </div>
+    <div class="col-md-2">
+        <a class="link-underline-light fs-5" asp-route-orderby="Rating" asp-route-ascending="true">Valutazione</a>
+    </div>
+    <div class="col-md-2">
+        <a class="link-underline-light fs-5" asp-route-orderby="CurrentPrice" asp-route-ascending="true">Prezzo</a>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
 @foreach(CourseViewModel course in Model)
 {
 <div class="row course mb-2">
@@ -40,3 +72,17 @@
     </div>
 </div>
 }
+
+<nav aria-label="Page navigation">
+    <ul class="pagination d-flex justify-content-center mt-3">
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" asp-route-page="1">Page 1 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" asp-route-page="2">Page 2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" asp-route-page="3">Page 3</a>
+        </li>
+    </ul>
+</nav>
