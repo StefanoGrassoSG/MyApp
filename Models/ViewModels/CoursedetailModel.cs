@@ -1,4 +1,5 @@
 using System.Data;
+using WebAppCourse.Models.Entities;
 using WebAppCourse.Models.Enums;
 using WebAppCourse.Models.ValueTypes;
 
@@ -19,7 +20,7 @@ namespace WebAppCourse.Models.ViewModels
             Lessons = new List<LessonViewModel>();
         }
 
-        public static CourseDetailViewModel FromDataRow(DataRow dataRow)
+        public static new CourseDetailViewModel FromDataRow(DataRow dataRow)
         {
             var courseDetailViewModel = new CourseDetailViewModel
             {
@@ -35,5 +36,23 @@ namespace WebAppCourse.Models.ViewModels
             };
             return courseDetailViewModel;
         }
+
+        public static CourseDetailViewModel Fromentity(Course entity)
+        {
+            var courseDetailViewModel = new CourseDetailViewModel
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Description = entity.Description,
+                ImagePath = entity.ImagePath,
+                Author = entity.Author,
+                Rating = entity.Rating,
+                FullPrice = entity.FullPrice,
+                CurrentPrice = entity.CurrentPrice,
+                Lessons = new List<LessonViewModel>()
+            };
+            return courseDetailViewModel;
+        }
+
     }
 }

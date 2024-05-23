@@ -48,7 +48,7 @@ namespace WebAppCourse.Models.Services.Application
                     {
                         Id = lesson.Id,
                         Title = lesson.Title,
-                        Description = lesson.Description,
+                        Description = lesson.Description ?? string.Empty,
                         Duration = TimeSpan.Parse(lesson.Duration)
                     }).ToList()
                 }).SingleOrDefaultAsync();
@@ -109,7 +109,7 @@ namespace WebAppCourse.Models.Services.Application
                     break;
             }
 
-            IQueryable<CourseViewModel> queryLinq =  baseQuery.Where(obj => obj.Title.Contains(courseListInputModel.Search)).AsNoTracking().Select(obj => new CourseViewModel {
+            IQueryable<CourseViewModel> queryLinq =  baseQuery.Where(obj => obj.Title.Contains(courseListInputModel.Search ?? string.Empty)).AsNoTracking().Select(obj => new CourseViewModel {
                 Id = obj.Id,
                 Title = obj.Title,
                 ImagePath = obj.ImagePath,
@@ -165,6 +165,14 @@ namespace WebAppCourse.Models.Services.Application
 
             ListViewModel<CourseViewModel> result = await GetCourses(inputModel);
             return result.Results;
+        }
+
+        public async Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel model)
+        {
+            var course = new Course(model.Title,"Mario Rossi");
+            dbContext.Add(course);
+            await dbContext.SaveChangesAsync();
+            return CourseDetailViewModel.Fromentity(course);
         }
     }
 }

@@ -35,7 +35,9 @@ namespace WebAppCourse.Models.Services.Application
             foreach (DataRow lessonRow in lessonDataTable.Rows)
             {
                 var lessonViewModel = LessonViewModel.FromDataRow(lessonRow);
-                courseDetailViewModel.Lessons.Add(lessonViewModel);
+                if(courseDetailViewModel.Lessons != null) {
+                    courseDetailViewModel.Lessons.Add(lessonViewModel);
+                }
             }
             return courseDetailViewModel;
         }
@@ -67,6 +69,19 @@ namespace WebAppCourse.Models.Services.Application
         public Task<List<CourseViewModel>> GetBestRatingCourses()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel model)
+        {
+            string title = model.Title;
+            string author = "Mario Rossi";
+
+            var dataSet = await db.Query($@"INSERT INTO Courses (Title, Author, ImagePath, CurrentPrice_Currency, CurrentPrice_Amount, FullPrice_Currency, FullPrice_Amount) VALUES ({title}, {author}, '/Courses/default.png', 'EUR', 0, 'EUR', 0);
+                          SELECT SCOPE_IDENTITY();");
+
+            int courseId = Convert.ToInt32(dataSet.Tables[0].Rows[0][0]);
+            CourseDetailViewModel course = await GetCourse(courseId);
+            return course;  
         }
     }
 }

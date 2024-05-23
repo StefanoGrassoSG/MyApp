@@ -31,5 +31,24 @@ namespace WebAppCourse.Controllers
             ViewData["title"] = viewModel.Title;
             return View(viewModel);
         }
+
+        public IActionResult Create() 
+        {   
+            ViewData["Title"] = "Nuovo Corso";
+            var inputModel = new CourseCreateInputModel();
+            return View(inputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CourseCreateInputModel model) 
+        {   
+            if(!ModelState.IsValid)
+            {
+                ViewData["Title"] = "Nuovo Corso";
+                return View(model);
+            }
+            CourseDetailViewModel course = await service.CreateCourseAsync(model);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

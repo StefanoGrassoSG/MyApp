@@ -9,5 +9,6 @@ namespace WebAppCourse.Models.Services.Application
         Task<CourseDetailViewModel> GetCourse(int id);
         Task<List<CourseViewModel>> GetBestRatingCourses();
         Task<List<CourseViewModel>> GetMostRecentCourses();
+        Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel model);
     }
 }

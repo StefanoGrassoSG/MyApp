@@ -21,27 +21,37 @@ internal class Program
             //homeProfile.VaryByQueryKeys = new string[] {"page"};
             options.CacheProfiles.Add("Home", homeProfile);
         });
-        builder.Services.AddControllersWithViews();
+       // builder.Services.AddControllersWithViews();
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-        //builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
-        builder.Services.AddTransient<ICourseService, EfCoreCourseService>();
-        //builder.Services.AddTransient<IDatabase, SqlDatabaseAccessor>();
+
+        //Scegliere ADO.NET oppure Entity framework core
+        var option = "Ef";
+        switch(option)
+        {
+            case "Adonet":
+                builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
+                builder.Services.AddTransient<IDatabase, SqlDatabaseAccessor>();
+            break;
+
+            case "Ef":
+                builder.Services.AddTransient<ICourseService, EfCoreCourseService>();
+                builder.Services.AddDbContextPool<WebAppDbContext>(optionsBuilder => {
+                    string connectionStringWrong = builder.Configuration.GetConnectionString("default")!;
+                    string connectionString = connectionStringWrong.Replace(@"\\", @"\");
+                    optionsBuilder.UseSqlServer(connectionString);
+        });
+            break;
+        }
+     
         builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
         builder.Configuration.AddJsonFile("appsettings.json");
         builder.Configuration.AddEnvironmentVariables();
-        string connectionStringWrong = builder.Configuration.GetConnectionString("default")!;
-        string connectionString = connectionStringWrong.Replace(@"\\", @"\");
-        builder.Services.AddDbContextPool<WebAppDbContext>(optionsBuilder => {
-            optionsBuilder.UseSqlServer(connectionString);
-        });
         builder.Services.AddSingleton<RequestCounterService>();
         builder.Services.Configure<ConnectionStringsOptions>(builder.Configuration.GetSection("ConnectionStrings"));
         builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection("Courses"));
         builder.Services.Configure<CacheTimeOptions>(builder.Configuration.GetSection("Cache"));
         var app = builder.Build();
         var env = app.Services.GetRequiredService<IWebHostEnvironment>();
-
-     
 
         if(env.IsDevelopment()) {
             app.UseDeveloperExceptionPage();

@@ -67,5 +67,10 @@ namespace WebAppCourse.Models.Services.Application
                 return courseService.GetBestRatingCourses();
             });
         }
+
+        public Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel model)
+        {
+            return courseService.CreateCourseAsync(model);
+        }
     }
 }
