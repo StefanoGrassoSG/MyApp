@@ -26,13 +26,13 @@ public partial class Course
 
     public string Title { get; set; } = null!;
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public string? ImagePath { get; set; }
+    public string ImagePath { get; set; }
 
     public string Author { get; set; } = null!;
 
-    public string? Email { get; set; }
+    public string Email { get; set; }
 
     public decimal? Rating { get; set; }
 

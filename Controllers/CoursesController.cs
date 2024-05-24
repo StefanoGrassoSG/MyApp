@@ -1,5 +1,6 @@
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
+using WebAppCourse.Models.Exceptions;
 using WebAppCourse.Models.InputModels;
 using WebAppCourse.Models.Services.Application;
 using WebAppCourse.Models.ViewModels;
@@ -9,9 +10,11 @@ namespace WebAppCourse.Controllers
     public class CoursesController : Controller
     {
         private readonly ICachedCourseService service;
-        public CoursesController(ICachedCourseService service)
+        private readonly ICourseService courseService;
+        public CoursesController(ICachedCourseService service, ICourseService courseService)
         {
             this.service = service;
+            this.courseService = courseService;
         }
         public async Task<IActionResult> Index(CourseListInputModel model) 
         {
@@ -42,13 +45,52 @@ namespace WebAppCourse.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CourseCreateInputModel model) 
         {   
-            if(!ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                ViewData["Title"] = "Nuovo Corso";
-                return View(model);
+                try 
+                {
+                    CourseDetailViewModel course = await service.CreateCourseAsync(model);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(CourseTitleUnavailableException ex)
+                {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), ex.Message);
+                }
             }
-            CourseDetailViewModel course = await service.CreateCourseAsync(model);
-            return RedirectToAction(nameof(Index));
+            ViewData["Title"] = "Nuovo Corso";
+            return View(model);
+        }
+
+        public async Task<IActionResult> IsTitleAvailable(string title)
+        {
+            bool result = await courseService.IsTitleAvailableAsync(title);
+            return Json(result);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            ViewData["Title"] = "Modifica corso";
+            CourseEditInputModel inputModel = await courseService.GetCourseEditAsync(id);
+            return View(inputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CourseEditInputModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                try 
+                {
+                    CourseEditInputModel course = await courseService.EditCourseAsync(model);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(CourseTitleUnavailableException ex)
+                {
+                    ModelState.AddModelError(nameof(CourseEditInputModel.Title), ex.Message);
+                }
+            }
+            ViewData["Title"] = "NModifica corso";
+            return View(model);
         }
     }
 }

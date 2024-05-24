@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using System.Xml.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -171,7 +172,66 @@ namespace WebAppCourse.Models.Services.Application
         {
             var course = new Course(model.Title,"Mario Rossi");
             dbContext.Add(course);
-            await dbContext.SaveChangesAsync();
+            try 
+            {
+                await dbContext.SaveChangesAsync();
+                return CourseDetailViewModel.Fromentity(course);
+            }
+            catch(DbUpdateException ex)
+            {
+                throw new CourseTitleUnavailableException(course.Title, ex);
+            }
+        }
+
+        public async Task<bool> IsTitleAvailableAsync(string title)
+        {
+            bool titleExist = await dbContext.Courses.AnyAsync(obj => obj.Title.ToLower() == title.ToLower());
+
+            return !titleExist;
+        }
+
+        public async Task<CourseEditInputModel> GetCourseEditAsync(int id)
+        {
+            var course = await dbContext.Courses.Where(obj => obj.Id == id).FirstOrDefaultAsync();
+            if(course == null)
+            {
+                throw new CourseNotFoundException(id);
+            }
+            var editModel = new CourseEditInputModel 
+            {
+                Title = course.Title,
+                Description = course.Description,
+                ImagePath = course.ImagePath,
+                Email = course.Email,
+                FullPrice = course.FullPrice,
+                CurrentPrice = course.CurrentPrice
+            };
+            return editModel;
+        }
+        async Task<CourseDetailViewModel> ICourseService.EditCourseAsync(CourseEditInputModel model)
+        {
+            Course? course = await dbContext.Courses.FindAsync(model.Id);
+
+            if(course == null)
+            {
+                throw new CourseNotFoundException(model.Id);
+            }
+
+            course.Title = model.Title;
+            course.Description = model.Description;
+            course.ImagePath = model.ImagePath;
+            course.Email = model.Email;
+            course.FullPrice = model.FullPrice;
+            course.CurrentPrice = model.CurrentPrice;
+
+            try 
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch(DbUpdateException ex)
+            {
+                throw new CourseTitleUnavailableException(course.Title, ex);
+            }
             return CourseDetailViewModel.Fromentity(course);
         }
     }

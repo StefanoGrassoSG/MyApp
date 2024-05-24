@@ -72,5 +72,24 @@ namespace WebAppCourse.Models.Services.Application
         {
             return courseService.CreateCourseAsync(model);
         }
+
+        public Task<bool> IsTitleAvailableAsync(string title)
+        {
+            return courseService.IsTitleAvailableAsync(title);
+        }
+
+        public Task<CourseEditInputModel> GetCourseEditAsync(int id)
+        {
+              return memoryCache.GetOrCreateAsync($"CourseEditAsync", cacheEntry => 
+            {
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(cacheoptions.CurrentValue.Time));
+                return courseService.GetCourseEditAsync(id);
+            });
+        }
+
+        public Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel model)
+        {
+             return courseService.EditCourseAsync(model);
+        }
     }
 }

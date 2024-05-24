@@ -83,5 +83,19 @@ namespace WebAppCourse.Models.Services.Application
             CourseDetailViewModel course = await GetCourse(courseId);
             return course;  
         }
+
+        public Task<bool> IsTitleAvailableAsync(string title)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CourseEditInputModel> GetCourseEditAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+        Task<CourseDetailViewModel> ICourseService.EditCourseAsync(CourseEditInputModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

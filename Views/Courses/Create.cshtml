@@ -2,10 +2,10 @@
 <h1>
     @ViewData["Title"]
 </h1>
-<form method="POST">
+<form method="POST" id="myForm">
     <div class="row">
         <div class="col-md-8">
-            <input type="text" asp-for="Title" class="form-control form-control-lg" placeholder="Inserisci un titolo accattivante...">
+            <input type="text" .validate() asp-for="Title" class="form-control form-control-lg" placeholder="Inserisci un titolo accattivante...">
             <span asp-validation-for="Title"></span>
         </div>
         <div class="col-md-4">
@@ -15,3 +15,7 @@
         </div>
     </div>
 </form>
+@section Scripts
+{
+    <partial name="_Validation"></partial>
+}
