@@ -12,5 +12,8 @@ namespace WebAppCourse.Models.InputModels
         RegularExpression(@"^[\w\s\.]+$", ErrorMessage = "Titolo non valido"),
         Remote(action: nameof(CoursesController.IsTitleAvailable), controller:"Courses", ErrorMessage ="Il titolo esiste già")]
         public string Title {get;set;} = string.Empty;
+
+        [Required]
+        public int Id {get;set;}
     }
 }

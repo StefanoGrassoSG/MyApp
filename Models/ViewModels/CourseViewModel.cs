@@ -7,12 +7,12 @@ namespace WebAppCourse.Models.ViewModels
     public class CourseViewModel
     {
         public int Id {get;set;}
-        public string Title {get;set;}
+        public string Title {get;set;} = string.Empty;
         public string? ImagePath {get;set;}
-        public string Author {get;set;}
+        public string Author {get;set;} = string.Empty;
         public decimal? Rating {get;set;}
-        public Money FullPrice {get;set;}
-        public Money CurrentPrice {get;set;}
+        public Money FullPrice {get;set;} = new Money();
+        public Money CurrentPrice {get;set;} = new Money();
 
         public static CourseViewModel FromDataRow(DataRow courseRow)
         {

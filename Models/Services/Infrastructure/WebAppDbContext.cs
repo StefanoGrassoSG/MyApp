@@ -26,14 +26,17 @@ public partial class WebAppDbContext : DbContext
                 builder.Property(money => money.Currency)
                 .HasConversion<string>()
                 .HasColumnName("CurrentPrice_Currency");
-                builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount");
+                builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount").HasColumnType("decimal(18,2)");
             });
+
+            entity.Property(r => r.Rating)
+                .HasColumnType("decimal(18,1)");
 
             entity.OwnsOne(course => course.FullPrice, builder => {
                 builder.Property(money => money.Currency)
                 .HasConversion<string>()
                 .HasColumnName("FullPrice_Currency");
-                builder.Property(money => money.Amount).HasColumnName("FullPrice_Amount");
+                builder.Property(money => money.Amount).HasColumnName("FullPrice_Amount").HasColumnType("decimal(18,2)");
             });
 
             entity.HasMany(course => course.Lessons)

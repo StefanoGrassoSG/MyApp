@@ -8,8 +8,8 @@ namespace WebAppCourse.Customization.TagHelpers
 {
     public class OrderLinkTagHelper : AnchorTagHelper
     {
-        public string OrderBy {get;set;}
-        public CourseListInputModel Input {get;set;}
+        public string OrderBy {get;set;} = string.Empty;
+        public CourseListInputModel Input {get;set;} = new CourseListInputModel();
         public OrderLinkTagHelper(IHtmlGenerator generator) : base(generator)
         {
         }

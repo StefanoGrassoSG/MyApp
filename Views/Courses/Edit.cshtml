@@ -1,7 +1,7 @@
 @using WebAppCourse.Models.Enums
 @model CourseEditInputModel
 <section class="course-info">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-9">
                 <h1>
@@ -9,8 +9,8 @@
                 </h1>
             </div>
             <div class="col-md-3 d-flex align-items-center">
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Salva</button>
-                <button type="button" class="btn btn-danger btn-lg ml-3"><i class="fas fa-trash-alt"></i></button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block flex-grow-1">Salva</button>
+                <button type="button" class="btn btn-danger btn-lg ms-3"><i class="fas fa-trash-alt"></i></button>
             </div>
         </div>
         <div class="row">
@@ -19,44 +19,48 @@
         <input type="hidden" asp-for="Id">
         <div class="row">
             <div class="col-md-9">
-                <div class="form-group">
-                    <label asp-for="Title"></label>
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="mb-1"></label>
                     <input type="text" class="form-control form-control-lg" asp-for="Title">
                     <span asp-validation-for="Title"></span>
                 </div>
 
                  <div class="form-group">
-                    <label asp-for="Description"></label>
-                    <textarea class="form-control form-control-lg" asp-for="Description"></textarea>
+                    <label asp-for="Description" class="mb-1"></label>
+                    <textarea class="form-control form-control-lg" id="editor" asp-for="Description"></textarea>
                     <span asp-validation-for="Description"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <aside>                   
-                    <div class="form-group">
-                        <label asp-for="Email"></label>
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="mb-1"></label>
                         <input type="email" class="form-control" asp-for="Email">
                         <span asp-validation-for="Email"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="FullPrice"></label>
+                    <div class="form-group mb-3">
+                        <label asp-for="FullPrice" class="mb-1"></label>
                         <div class="input-group">
                             <select asp-items="@Html.GetEnumSelectList(typeof(Currency))"></select>
                             <input type="number" step="any" asp-for="FullPrice.Amount">
                             <span asp-validation-for="FullPrice"></span>
                         </div>     
                     </div>
-                    <div class="form-group">
-                        <label asp-for="CurrentPrice"></label>
+                    <div class="form-group mb-3">
+                        <label asp-for="CurrentPrice" class="mb-1"></label>
                         <div class="input-group">
                             <select asp-items="@Html.GetEnumSelectList(typeof(Currency))"></select>
                             <input type="number" step="any" asp-for="CurrentPrice.Amount">
                             <span asp-validation-for="CurrentPrice"></span>
                         </div>     
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ImagePath"></label>
-                        <img src="@Model.ImagePath" class="img-fluid">
+                    <div class="form-group mb-3">
+                        <label asp-for="ImagePath" class="mb-1"></label>
+                        <img id="preview" src="~/@Model.ImagePath" class="img-fluid">
+                        <label class="mt-3" asp-for="Image"></label>
+                        <div class="input-group mt-3">
+                            <input type="file" class="form-control" asp-for="Image" onchange="updatePreview(this)">
+                        </div>
                     </div>
                 </aside>
             </div>
@@ -66,4 +70,15 @@
 @section Scripts
 {
     <partial name="_Validation"></partial>
+    <partial name="_Summernote"></partial>
+
+    <script>
+        function updatePreview(inputFile){
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#preview').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(inputFile.files[0]);
+        }
+    </script>
 }

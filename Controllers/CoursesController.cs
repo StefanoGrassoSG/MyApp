@@ -49,8 +49,9 @@ namespace WebAppCourse.Controllers
             {
                 try 
                 {
-                    CourseDetailViewModel course = await service.CreateCourseAsync(model);
-                    return RedirectToAction(nameof(Index));
+                    CourseDetailViewModel course = await courseService.CreateCourseAsync(model);
+                    TempData["ConfirmationMessage"] = "Bene! hai creato il corso, ora perchè non lo completi con gli altri dati?";
+                    return RedirectToAction(nameof(Edit), new {id = course.Id});
                 }
                 catch(CourseTitleUnavailableException ex)
                 {
@@ -61,9 +62,9 @@ namespace WebAppCourse.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> IsTitleAvailable(string title)
+        public async Task<IActionResult> IsTitleAvailable(string title, int id = 0)
         {
-            bool result = await courseService.IsTitleAvailableAsync(title);
+            bool result = await courseService.IsTitleAvailableAsync(title, id);
             return Json(result);
         }
 
@@ -81,15 +82,16 @@ namespace WebAppCourse.Controllers
             {
                 try 
                 {
-                    CourseEditInputModel course = await courseService.EditCourseAsync(model);
-                    return RedirectToAction(nameof(Index));
+                    CourseDetailViewModel course = await courseService.EditCourseAsync(model);
+                    TempData["ConfirmationMessage"] = "I dati sono stati salvati con successo";
+                    return RedirectToAction(nameof(Detail), new { id = model.Id});
                 }
                 catch(CourseTitleUnavailableException ex)
                 {
-                    ModelState.AddModelError(nameof(CourseEditInputModel.Title), ex.Message);
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), ex.Message);
                 }
             }
-            ViewData["Title"] = "NModifica corso";
+            ViewData["Title"] = "Modifica corso";
             return View(model);
         }
     }

@@ -4,8 +4,8 @@ namespace WebAppCourse.Models.ViewModels
 {
     public class CourseListViewModel : IPagination
     {
-        public ListViewModel<CourseViewModel> Courses {get;set;}
-        public CourseListInputModel Input {get;set;}
+        public ListViewModel<CourseViewModel> Courses {get;set;} = new ListViewModel<CourseViewModel>();
+        public CourseListInputModel Input {get;set;} = new CourseListInputModel();
 
         int IPagination.currentPage => Input.Page;
 
@@ -13,9 +13,9 @@ namespace WebAppCourse.Models.ViewModels
 
         int IPagination.ResultPerPage => Input.Limit;
 
-        string IPagination.Search => Input.Search;
+        string IPagination.Search => Input.Search ?? string.Empty;
 
-        string IPagination.OrderBy => Input.Orderby;
+        string IPagination.OrderBy => Input.Orderby ?? string.Empty;
 
         bool IPagination.Ascending => Input.Ascending;
     }

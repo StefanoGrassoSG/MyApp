@@ -7,8 +7,28 @@
       "destination": "wwwroot/lib/bootstrap"
     },
     {
+      "library": "popper.js@2.11.6",
+      "destination": "wwwroot/lib/popper/",
+      "files": [
+        "umd/popper.min.js"
+      ]
+    },
+    {
       "library": "font-awesome@6.0.0",
       "destination": "wwwroot/lib/fontawesome"
+    },
+    {
+      "library": "summernote@0.8.20",
+      "destination": "wwwroot/lib/summernote",
+      "files": [
+        "font/summernote.eot",
+        "font/summernote.ttf",
+        "font/summernote.woff",
+        "font/summernote.woff",
+        "summernote-bs5.min.css",
+        "summernote-bs5.min.js",
+        "lang/summernote-it-IT.js"
+      ]
     }
   ]
 }

@@ -9,8 +9,10 @@ namespace WebAppCourse.Controllers
         public IActionResult Index() 
         {
             var feature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            switch(feature.Error)
+            if(feature != null)
             {
+                switch(feature.Error)
+                {
                 case CourseNotFoundException exc:
                     ViewData["Title"] = "Corso non trovato";
                     Response.StatusCode = 404;
@@ -18,7 +20,9 @@ namespace WebAppCourse.Controllers
                 default:
                     ViewData["Title"] = "Errore";
                     return View();
+                }
             }
+            return View();
         }
 
         [Route("Error/{statusCode}")]

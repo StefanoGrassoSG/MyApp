@@ -14,9 +14,9 @@ namespace WebAppCourse.Customization.ModelBinders
         }
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            string? search = bindingContext.ValueProvider.GetValue("Search").FirstValue;
+            string search = bindingContext.ValueProvider.GetValue("Search").FirstValue ?? string.Empty;
             int page = Convert.ToInt32(bindingContext.ValueProvider.GetValue("Page").FirstValue);
-            string? orderby = bindingContext.ValueProvider.GetValue("Orderby").FirstValue;
+            string orderby = bindingContext.ValueProvider.GetValue("Orderby").FirstValue ?? string.Empty;;
             bool ascending = Convert.ToBoolean(bindingContext.ValueProvider.GetValue("Ascending").FirstValue);
 
             var inputModel = new CourseListInputModel(search, page, orderby, ascending,courseOptions.CurrentValue.PerPage, courseOptions.CurrentValue);

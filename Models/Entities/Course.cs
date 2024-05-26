@@ -32,7 +32,7 @@ public partial class Course
 
     public string Author { get; set; } = null!;
 
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
     public decimal? Rating { get; set; }
 

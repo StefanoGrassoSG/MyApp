@@ -84,7 +84,7 @@ namespace WebAppCourse.Models.Services.Application
             return course;  
         }
 
-        public Task<bool> IsTitleAvailableAsync(string title)
+        public Task<bool> IsTitleAvailableAsync(string title, int id)
         {
             throw new NotImplementedException();
         }

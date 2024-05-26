@@ -6,13 +6,13 @@ namespace WebAppCourse.Models.Options
     {
         public int PerPage {get;set;}
         public int InHome {get;set;}
-        public OrderOptions Order {get;set;}
+        public OrderOptions Order {get;set;} = new OrderOptions();
     }
 
     public partial class OrderOptions
     {
-        public string By {get;set;}
+        public string By {get;set;} = string.Empty;
         public bool Ascending {get;set;}
-        public string[] Allow {get;set;}
+        public string[] Allow {get;set;} = [];
     }
 }

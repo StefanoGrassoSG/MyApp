@@ -21,20 +21,14 @@ namespace WebAppCourse.Models.Services.Application
         }
         public Task<CourseDetailViewModel> GetCourse(int id)
         {
-            int TimeCached = cacheoptions.CurrentValue.Time;
-            return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
+            try
+            {   
+                return courseService.GetCourse(id);
+            }
+            catch
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(TimeCached));
-                try
-                {
-                    return courseService.GetCourse(id);
-                }
-                catch
-                {
-                    throw new CourseNotFoundException(id);
-                }
-                
-            });
+                throw new CourseNotFoundException(id);
+            }
         }
 
         public Task<ListViewModel<CourseViewModel>> GetCourses(CourseListInputModel courseListInputModel)
@@ -73,23 +67,21 @@ namespace WebAppCourse.Models.Services.Application
             return courseService.CreateCourseAsync(model);
         }
 
-        public Task<bool> IsTitleAvailableAsync(string title)
+        public Task<bool> IsTitleAvailableAsync(string title, int id = 0)
         {
-            return courseService.IsTitleAvailableAsync(title);
+            return courseService.IsTitleAvailableAsync(title, id);
         }
 
         public Task<CourseEditInputModel> GetCourseEditAsync(int id)
         {
-              return memoryCache.GetOrCreateAsync($"CourseEditAsync", cacheEntry => 
-            {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(cacheoptions.CurrentValue.Time));
-                return courseService.GetCourseEditAsync(id);
-            });
+            return courseService.GetCourseEditAsync(id);
         }
 
-        public Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel model)
+        public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel model)
         {
-             return courseService.EditCourseAsync(model);
+           CourseDetailViewModel viewModel = await courseService.EditCourseAsync(model);
+           memoryCache.Remove($"Course{model.Id}");
+           return viewModel;
         }
     }
 }

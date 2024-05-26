@@ -183,9 +183,9 @@ namespace WebAppCourse.Models.Services.Application
             }
         }
 
-        public async Task<bool> IsTitleAvailableAsync(string title)
+        public async Task<bool> IsTitleAvailableAsync(string title, int id)
         {
-            bool titleExist = await dbContext.Courses.AnyAsync(obj => obj.Title.ToLower() == title.ToLower());
+            bool titleExist = await dbContext.Courses.AnyAsync(obj => obj.Title.ToLower() == title.ToLower() && obj.Id != id);
 
             return !titleExist;
         }

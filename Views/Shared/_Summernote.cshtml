@@ -1,0 +1,19 @@
+@* <script src="~/lib/summernote/summernote-bs5.min.js"></script>
+<script src="~/lib/summernote/lang/summernote-it-IT.js"></script>
+<script src="~/lib/popper/umd/popper.min.js"></script>
+<link rel="stylesheet" href="~/lib/summernote/summernote-bs5.min.css"> *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js" integrity="sha512-lVkQNgKabKsM1DA/qbhJRFQU8TuwkLF2vSN3iU/c7+iayKs08Y8GXqfFxxTZr1IcpMovXnf2N/ZZoMgmZep1YQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/lang/summernote-it-IT.min.js" integrity="sha512-j5ltAAHi0SpyE7crhS6hu9MFwGkjX0M6QxY/qHKhu1RFM6iRANuP744K5cFrNVBC7Tr2lz8STe8zc8DFFIku/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" integrity="sha512-ZbehZMIlGA8CTIOtdE+M81uj3mrcgyrh6ZFeG33A4FHECakGrOsTPlPQ8ijjLkxgImrdmSVUHn1j+ApjodYZow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script>
+    $('#editor').summernote({
+        minHeight: 300,
+        lang: 'it-IT',
+        toolbar: [
+            ['style', ['bold', 'italic']],
+            ['para', ['ul', 'ol']],
+            ['insert', ['video']],
+            ['view', ['codeview']]
+        ]
+    });
+</script>

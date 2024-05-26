@@ -4,6 +4,7 @@
         <div class="col-md-9">
             <h1>
                 @Model.Title
+                <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@Model.Id"><i class="fas fa-pencil-alt"></i>Modifica</a>
             </h1>
         </div>
         <div class="col-md-3 d-flex align-items-end">
@@ -12,7 +13,7 @@
     </div>
     <div class="row">
         <div class="col-md-9">
-            <p>@Model.Description</p>
+            <p html-sanitize>@Model.Description</p>
         </div>
         <div class="col-md-3">
             <aside>

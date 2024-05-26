@@ -15,7 +15,7 @@ namespace WebAppCourse.Models.InputModels
         MinLength(10, ErrorMessage = "Il titolo dev'essere di almeno {1} caratteri"),
         MaxLength(199, ErrorMessage = "Il titolo dev'essere di al massimo {1} caratteri"),
         RegularExpression(@"^[\w\s\.]+$", ErrorMessage = "Titolo non valido"),
-        Remote(action: "IsTitleAvailable", controller: "Courses", ErrorMessage = "Il titolo esiste già"),
+        Remote(action: "IsTitleAvailable", controller: "Courses", ErrorMessage = "Il titolo esiste già", AdditionalFields = "Id"),
         Display(Name = "Titolo")]
         public string Title {get;set;} = string.Empty;
 
@@ -25,7 +25,7 @@ namespace WebAppCourse.Models.InputModels
         public string Description {get;set;} = string.Empty;
 
         [Display(Name = "Immagine rappresentativa")]
-        public string ImagePath {get;set;} = string.Empty;
+        public string ImagePath {get;set;} 
 
         [Required(ErrorMessage = "L'email di contatto è obbligatoria"),
         EmailAddress(ErrorMessage = "Devi inserire un indirizzo email"),
@@ -40,6 +40,9 @@ namespace WebAppCourse.Models.InputModels
         Display(Name = "Prezzo scontato")]
         public Money CurrentPrice {get;set;} = new Money();
 
+        [Display(Name = "Nuova Immagine")]
+        public IFormFile? Image {get;set;} 
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if(FullPrice.Currency != CurrentPrice.Currency)
@@ -50,11 +53,6 @@ namespace WebAppCourse.Models.InputModels
             {
                 yield return new ValidationResult("Il prezzo intero non può essere minore di quello scontato");
             }
-        }
-
-        public static implicit operator CourseEditInputModel(CourseDetailViewModel v)
-        {
-            throw new NotImplementedException();
         }
     }
 }

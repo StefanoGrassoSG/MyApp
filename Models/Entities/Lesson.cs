@@ -13,7 +13,7 @@ public partial class Lesson
 
     public string? Description { get; set; }
 
-    public string Duration { get; set; } 
+    public string Duration { get; set; } = string.Empty;
 
     public virtual Course Course { get; set; } = null!;
 }
