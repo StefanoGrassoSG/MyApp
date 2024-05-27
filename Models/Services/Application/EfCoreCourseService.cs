@@ -17,11 +17,13 @@ namespace WebAppCourse.Models.Services.Application
         private readonly WebAppDbContext dbContext;
         private readonly ILogger logger;
         private readonly IOptionsMonitor<CoursesOptions> courseOptions;
-        public EfCoreCourseService(WebAppDbContext dbContext, ILogger<EfCoreCourseService> logger, IOptionsMonitor<CoursesOptions> coursesOptions)
+        private readonly IImageSaver imageSaver;
+        public EfCoreCourseService(WebAppDbContext dbContext, ILogger<EfCoreCourseService> logger, IOptionsMonitor<CoursesOptions> coursesOptions, IImageSaver imageSaver)
         {
             this.dbContext = dbContext;
             this.logger = logger;
             this.courseOptions = coursesOptions;
+            this.imageSaver = imageSaver;
         } 
         public async Task<CourseDetailViewModel> GetCourse(int id)
         {
@@ -223,6 +225,24 @@ namespace WebAppCourse.Models.Services.Application
             course.Email = model.Email;
             course.FullPrice = model.FullPrice;
             course.CurrentPrice = model.CurrentPrice;
+
+            if(model.Image != null)
+            {
+                try 
+                {
+                    string path = await imageSaver.SaveImage(model.Id, model.Image);
+                    course.ImagePath = path;
+                }
+                catch (Exception ex)
+                {
+                    throw new CourseImageInvalidException(ex);
+                }
+              
+            }
+            else 
+            {
+                course.ImagePath = "default.png";
+            }
 
             try 
             {

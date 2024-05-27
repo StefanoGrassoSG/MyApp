@@ -1,4 +1,6 @@
+using AngleSharp;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebAppCourse.Models.Options;
@@ -44,12 +46,14 @@ internal class Program
         }
      
         builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
+        builder.Services.AddSingleton<IImageSaver, MagickNetImageSaver>();
         builder.Configuration.AddJsonFile("appsettings.json");
         builder.Configuration.AddEnvironmentVariables();
         builder.Services.AddSingleton<RequestCounterService>();
         builder.Services.Configure<ConnectionStringsOptions>(builder.Configuration.GetSection("ConnectionStrings"));
         builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection("Courses"));
         builder.Services.Configure<CacheTimeOptions>(builder.Configuration.GetSection("Cache"));
+        builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
         var app = builder.Build();
         var env = app.Services.GetRequiredService<IWebHostEnvironment>();
 

@@ -90,6 +90,10 @@ namespace WebAppCourse.Controllers
                 {
                     ModelState.AddModelError(nameof(CourseDetailViewModel.Title), ex.Message);
                 }
+                catch(CourseImageInvalidException ex)
+                {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), ex.Message);
+                }
             }
             ViewData["Title"] = "Modifica corso";
             return View(model);

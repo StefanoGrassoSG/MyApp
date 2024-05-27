@@ -24,7 +24,7 @@
                 <div class="price">
                     @Model.CurrentPrice.ToString()<br /><s>@Model.FullPrice.ToString()</s>
                 </div>
-                <img src="~/@Model.ImagePath" class="img-fluid">
+                <img src="~/@Model.ImagePath" asp-append-version class="img-fluid">
             </aside>
         </div>
     </div>
