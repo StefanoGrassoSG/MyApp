@@ -29,6 +29,8 @@ public partial class WebAppDbContext : DbContext
                 builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount").HasColumnType("decimal(18,2)");
             });
 
+            entity.Property(course => course.RowVersion).IsRowVersion();
+
             entity.Property(r => r.Rating)
                 .HasColumnType("decimal(18,1)");
 

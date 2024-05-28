@@ -43,6 +43,8 @@ namespace WebAppCourse.Models.InputModels
         [Display(Name = "Nuova Immagine")]
         public IFormFile? Image {get;set;} 
 
+        public byte[]? RowVersion {get;set;}
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if(FullPrice.Currency != CurrentPrice.Currency)

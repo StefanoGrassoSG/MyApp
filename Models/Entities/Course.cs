@@ -40,5 +40,7 @@ public partial class Course
 
     public Money CurrentPrice { get; set; }
 
+    public byte[] RowVersion {get;set;}
+
     public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
 }

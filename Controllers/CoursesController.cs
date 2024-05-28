@@ -86,6 +86,10 @@ namespace WebAppCourse.Controllers
                     TempData["ConfirmationMessage"] = "I dati sono stati salvati con successo";
                     return RedirectToAction(nameof(Detail), new { id = model.Id});
                 }
+                catch(OptimisticException ex)
+                {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), ex.Message);
+                }
                 catch(CourseTitleUnavailableException ex)
                 {
                     ModelState.AddModelError(nameof(CourseDetailViewModel.Title), ex.Message);

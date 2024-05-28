@@ -206,7 +206,8 @@ namespace WebAppCourse.Models.Services.Application
                 ImagePath = course.ImagePath,
                 Email = course.Email,
                 FullPrice = course.FullPrice,
-                CurrentPrice = course.CurrentPrice
+                CurrentPrice = course.CurrentPrice,
+                RowVersion = course.RowVersion
             };
             return editModel;
         }
@@ -225,6 +226,8 @@ namespace WebAppCourse.Models.Services.Application
             course.Email = model.Email;
             course.FullPrice = model.FullPrice;
             course.CurrentPrice = model.CurrentPrice;
+
+            dbContext.Entry(course).Property(course => course.RowVersion).OriginalValue = model.RowVersion;
 
             if(model.Image != null)
             {
@@ -248,10 +251,15 @@ namespace WebAppCourse.Models.Services.Application
             {
                 await dbContext.SaveChangesAsync();
             }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                throw new OptimisticException(ex);
+            }
             catch(DbUpdateException ex)
             {
                 throw new CourseTitleUnavailableException(course.Title, ex);
-            }
+            }   
+
             return CourseDetailViewModel.Fromentity(course);
         }
     }
