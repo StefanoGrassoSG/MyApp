@@ -17,6 +17,10 @@ namespace WebAppCourse.Controllers
                     ViewData["Title"] = "Corso non trovato";
                     Response.StatusCode = 404;
                     return View("CourseNotFound");
+                case LessonNotFoundException exc:
+                    ViewData["Title"] = "Lezione non trovata";
+                    Response.StatusCode = 404;
+                    return View("LessonNotFound");
                 default:
                     ViewData["Title"] = "Errore";
                     return View();

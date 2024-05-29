@@ -11,7 +11,7 @@ public partial class Lesson
 
     public string Title { get; set; } = null!;
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     public string Duration { get; set; } = string.Empty;
 

@@ -38,7 +38,7 @@
         <hr>
         <div class="row">
             <div class="col-md-9 d-flex align-items-center">
-                <a href="#">@lesson.Title</a>
+                <a asp-controller="Lessons" asp-action="Detail" asp-route-id="@lesson.Id">@lesson.Title</a>
             </div>
             <div class="col-md-3 d-flex align-items-center">
                 <i class="far fa-clock"></i><time class="ms-2">@lesson.Duration.ToString("h'h'm'm 's's'")</time>

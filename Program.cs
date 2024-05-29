@@ -37,6 +37,7 @@ internal class Program
 
             case "Ef":
                 builder.Services.AddTransient<ICourseService, EfCoreCourseService>();
+                builder.Services.AddTransient<ILessonService, EfCoreLessonService>();
                 builder.Services.AddDbContextPool<WebAppDbContext>(optionsBuilder => {
                     string connectionStringWrong = builder.Configuration.GetConnectionString("default")!;
                     string connectionString = connectionStringWrong.Replace(@"\\", @"\");
@@ -46,6 +47,7 @@ internal class Program
         }
      
         builder.Services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
+        builder.Services.AddTransient<ICachedLessonService, MemoryCacheLessonService>();
         builder.Services.AddSingleton<IImageSaver, MagickNetImageSaver>();
         builder.Configuration.AddJsonFile("appsettings.json");
         builder.Configuration.AddEnvironmentVariables();
